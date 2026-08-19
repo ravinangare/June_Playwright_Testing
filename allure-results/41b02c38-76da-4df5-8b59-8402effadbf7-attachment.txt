@@ -1,0 +1,6 @@
+{
+  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InZpa3JhbTE3ODcxNTc5MTQ5ODAiLCJwYXNzd29yZCI6IkFkbWluQDEyMyIsImlhdCI6MTc4NzE1NzkxN30.GDBTQnhIoITkzh0x77hCGOocT10Sl0Ro4DeJ_GN8HMY',
+  expires: '2026-08-26T16:45:17.135Z',
+  status: 'Success',
+  result: 'User authorized successfully.'
+}

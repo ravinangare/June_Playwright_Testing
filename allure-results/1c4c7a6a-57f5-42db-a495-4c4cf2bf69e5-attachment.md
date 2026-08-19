@@ -1,0 +1,86 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: bookStoreAPI.spec.js >> Book Store API flow >> Is user Authorized
+- Location: tests\bookStoreAPI.spec.js:49:7
+
+# Error details
+
+```
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 400
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect, request } from '@playwright/test';
+  2  | 
+  3  | const API_Account_URL = 'https://demoqa.com/Account/v1';
+  4  | 
+  5  | let registeredUserName = '';
+  6  | 
+  7  | test.describe.serial('Book Store API flow', () => {
+  8  |   test('Register New User', async ({ request }) => {
+  9  |     const response = await request.post(`${API_Account_URL}/User`, {
+  10 |       data: {
+  11 |         userName: `vikram${Date.now()}`,
+  12 |         password: 'Admin@123'
+  13 |       }
+  14 |     });
+  15 | 
+  16 |     expect(response.status()).toBe(201);
+  17 | 
+  18 |     const responseBody = await response.json();
+  19 |     expect(responseBody).toHaveProperty('userID');
+  20 |     expect(responseBody).toHaveProperty('username');
+  21 |     expect(responseBody).toHaveProperty('books');
+  22 | 
+  23 |     registeredUserName = responseBody.username;
+  24 | 
+  25 |     console.log('Registered username:', registeredUserName);
+  26 |   });
+  27 | 
+  28 |   test('Generate Authentication Token', async ({ request }) => {
+  29 |     expect(registeredUserName).not.toBe('');
+  30 | 
+  31 |     const response = await request.post(`${API_Account_URL}/GenerateToken`, {
+  32 |       data: {
+  33 |         userName: registeredUserName,
+  34 |         password: 'Admin@123'
+  35 |       }
+  36 |     });
+  37 | 
+  38 |     expect(response.status()).toBe(200);
+  39 | 
+  40 |     const responseBody = await response.json();
+  41 |     expect(responseBody).toHaveProperty('token');
+  42 |     expect(responseBody).toHaveProperty('expires');
+  43 |     expect(responseBody).toHaveProperty('status');
+  44 |     expect(responseBody).toHaveProperty('result');
+  45 | 
+  46 |     console.log(responseBody);
+  47 |   });
+  48 | 
+  49 |   test('Is user Authorized',async({request})=>{
+  50 |        const response = await request.post(`${API_Account_URL}/Authorized`,{
+  51 |             data:{
+  52 |                  userName: registeredUserName,
+  53 |                  password: 'Admin@123'
+  54 |             }
+  55 |         })
+> 56 |          expect(response.status()).toBe(200);
+     |                                    ^ Error: expect(received).toBe(expected) // Object.is equality
+  57 | 
+  58 |          const responseBody = await response.json();
+  59 |          console.log(responseBody)
+  60 |   })
+  61 | });
+```
